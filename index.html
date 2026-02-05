@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon AI Studio</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+
+/* ===== PRELOADER ===== */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #05050a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#preloader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.neon-loader {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.neon-loader-inner {
+    width: 100%;
+    height: 100%;
+    border: 4px solid transparent;
+    border-top: 4px solid #0ff;
+    border-bottom: 4px solid #0ff;
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+    box-shadow: 0 0 20px #0ff, inset 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.neon-loader::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border: 4px solid transparent;
+    border-left: 4px solid #ff00ff;
+    border-right: 4px solid #ff00ff;
+    border-radius: 50%;
+    animation: spinReverse 2s linear infinite;
+    box-shadow: 0 0 25px #ff00ff, inset 0 0 15px rgba(255, 0, 255, 0.2);
+}
+
+.neon-loader::after {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: -16px;
+    right: -16px;
+    bottom: -16px;
+    border: 4px solid transparent;
+    border-top: 4px solid #00ff9d;
+    border-bottom: 4px solid #00ff9d;
+    border-radius: 50%;
+    animation: spin 2.5s linear infinite;
+    box-shadow: 0 0 30px #00ff9d, inset 0 0 10px rgba(0, 255, 157, 0.2);
+}
+
+.loader-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #0ff;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    text-shadow: 0 0 10px #0ff;
+    letter-spacing: 2px;
+    animation: textPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes textPulse {
+    0% { opacity: 0.5; text-shadow: 0 0 5px #0ff; }
+    100% { opacity: 1; text-shadow: 0 0 15px #0ff, 0 0 25px #0ff; }
+}
+
+
+HTML: <div class="loader"></div> 
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  display: grid;
+  animation: l14 4s infinite;
+}
+.loader::before,
+.loader::after {    
+  content: "";
+  grid-area: 1/1;
+  border: 8px solid;
+  border-radius: 50%;
+  border-color: red red #0000 #0000;
+  mix-blend-mode: darken;
+  animation: l14 1s infinite linear;
+}
+.loader::after {
+  border-color: #0000 #0000 blue blue;
+  animation-direction: reverse;
+}
+@keyframes l14{ 
+  100%{transform: rotate(1turn)}
+}
+
+
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{background:#05050a;color:#fff;overflow-x:hidden}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 20px;
+}
+
+/* LOGO */
+.logo-wrap{margin-bottom:28px}
+.logo-wrap img{
+  width:min(75vw,300px);
+  height:auto;
+  filter:drop-shadow(0 0 28px #0ff);
+}
+
+/* TEXT */
+.neon-text{font-size:2.6rem;color:#0ff;text-shadow:0 0 22px #0ff}
+.tagline{margin-top:10px;color:#aaa}
+.sub{margin-bottom:30px;color:#777;font-size:.95rem}
+
+/* BUTTONS */
+.btn{
+  position:relative;
+  display:inline-block;
+  margin:12px;
+  padding:16px 34px;
+  border-radius:40px;
+  text-decoration:none;
+  color:#0ff;
+  border:1px solid #0ff;
+  overflow:hidden;
+}
+.btn.primary{background:#0ff;color:#000;font-weight:600}
+.btn-text{position:relative;z-index:2}
+.btn-glow{position:absolute;inset:0;box-shadow:0 0 30px #0ff;opacity:.65}
+
+/* SECTION */
+.section{padding:80px 20px}
+.section-header{text-align:center;margin-bottom:40px}
+.highlight{color:#0ff}
+
+/* CAROUSEL */
+.carousel{
+  max-width:420px;
+  margin:auto;
+  position:relative;
+  overflow:hidden;
+  border-radius:18px;
+}
+.carousel-track{display:flex;transition:transform .4s ease}
+.slide{min-width:100%;background:#000;padding:10px}
+
+/* arrows */
+.nav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(0,0,0,.6);
+  border:none;
+  color:#0ff;
+  font-size:26px;
+  padding:8px 14px;
+  cursor:pointer;
+}
+.nav.prev{left:8px}
+.nav.next{right:8px}
+
+/* Instagram fix */
+.instagram-media{min-width:100%!important}
+
+/* GRID (used everywhere – UI same) */
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+}
+.service-item{
+  background:#0b0b14;
+  padding:20px;
+  border-radius:14px;
+  text-align:center;
+}
+
+/* CONTACT */
+.contact{text-align:center}
+
+/* FIXED WHATSAPP */
+.whatsapp-float{
+  position:fixed;
+  bottom:18px;
+  right:18px;
+  width:56px;
+  height:56px;
+  background:#25D366;
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  z-index:999;
+  box-shadow:0 0 20px #25D366;
+}
+
+/* ===== NEON PULSE ===== */
+@keyframes neonPulse {
+  0%   { text-shadow: 0 0 10px #0ff, 0 0 20px #0ff; }
+  50%  { text-shadow: 0 0 25px #0ff, 0 0 50px #0ff; }
+  100% { text-shadow: 0 0 10px #0ff, 0 0 20px #0ff; }
+}
+
+.neon-text{
+  animation: neonPulse 2.5s infinite alternate;
+}
+
+/* ===== FLOATING HERO ===== */
+@keyframes float {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+.hero > div{
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ===== BUTTON NEON FLOW ===== */
+.btn::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(120deg,#0ff,transparent,#0ff);
+  opacity:.6;
+  filter:blur(12px);
+  animation: neonFlow 3s linear infinite;
+}
+
+@keyframes neonFlow{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+
+/* ===== CAROUSEL SOFT GLOW ===== */
+.carousel{
+  box-shadow:0 0 30px rgba(0,255,255,.35);
+  animation: softGlow 4s infinite alternate;
+}
+
+@keyframes softGlow{
+  from{box-shadow:0 0 15px rgba(0,255,255,.2)}
+  to{box-shadow:0 0 45px rgba(0,255,255,.6)}
+}
+
+/* ===== SERVICE CARD HOVER ===== */
+.service-item{
+  transition:.4s ease;
+}
+.service-item:hover{
+  transform:translateY(-10px) scale(1.04);
+  box-shadow:0 0 25px #0ff;
+}
+
+/* ===== WHATSAPP HEARTBEAT ===== */
+@keyframes beat{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.15)}
+  100%{transform:scale(1)}
+}
+
+.whatsapp-float{
+  animation: beat 1.8s infinite;
+}
+</style>
+</head>
+
+<body>
+<!-- PRELOADER -->
+<div id="preloader">
+    <div class="neon-loader">
+        <div class="neon-loader-inner"></div>
+        
+        <div class="loader-text"><center>Neon Ai Studio</center></div>
+        
+    </div>
+</div>
+<div >
+<!-- Load the font from Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="stylesheet">
+
+<h4 class="neon-text" style="
+  font-family: 'Satisfy', cursive; 
+  font-size: 15pt; 
+  text-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
+  font-weight: normal;">
+  Moreshwar R. Bhonde
+  </h4>
+  
+  </div>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="logo-wrap">
+      <img src="neon_ai_studio_logo.png" alt="Neon AI Studio">
+    </div>
+
+    <h1 class="neon-text">NEON AI STUDIO</h1>
+    <p class="tagline">Future-Ready Ads Powered by AI</p>
+    <p class="sub">Posters • Video Ads • Reels • AI Visuals</p>
+
+    <a href="#projects" class="btn">
+      <span class="btn-text">VIEW PROJECTS</span><span class="btn-glow"></span>
+    </a>
+
+    <a href="https://wa.me/917038821854" class="btn primary">
+      <span class="btn-text">ORDER ON WHATSAPP</span><span class="btn-glow"></span>
+    </a>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+  <div class="section-header">
+    <h2><span class="highlight">Featured Work</span></h2>
+  </div>
+
+  <div class="carousel">
+    <div class="carousel-track" id="carouselTrack"></div>
+    <button class="nav prev" onclick="moveSlide(-1)">❮</button>
+    <button class="nav next" onclick="moveSlide(1)">❯</button>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section">
+  <div class="section-header">
+    <h2><span class="highlight">Why Choose Us</span></h2>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-item">⚡ Fast Delivery</div>
+    <div class="service-item">🎨 Unique AI Designs</div>
+    <div class="service-item">💎 Primium Quility</div>
+  </div>
+</section>
+
+<!-- PRICING HINT -->
+<section class="section">
+  <div class="section-header">
+    <h2><span class="highlight">Pricing Starts From</span></h2>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-item">🖼️ Posters – ₹49+</div>
+    <div class="service-item">🎬 Reels – ₹599+</div>
+    <div class="service-item">💎 Premium Ads - ₹999</div>
+    <div class="service-item">📢 Brand Promo – Custom</div>
+    
+
+<div class="service-item"
+     style="background: black;
+            padding: 12px;
+            text-align: center;
+            border: 3px dotted yellow;
+            box-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red;">
+            
+    <a href="#ratepage" style="text-decoration: none;">
+        <marquee behavior="alternate"
+                 scrollamount="100"
+                 scrolldelay="2000"
+                 style="color: yellow;
+                        font-weight: bold;
+                        cursor: pointer;
+                        text-shadow: 0 0 10px red, 0 0 20px red;">
+            👉_ Click Here for Price List _👈
+        </marquee>
+    </a>
+</div>
+<!--<div class="service-item" style="background: black; padding: 10px; text-align: center;">
+    <marquee behavior="alternate" scrollamount="100" scrolldelay="1500" style="color: yellow; font-weight: bold; text-shadow: 0 0 10px red, 0 0 20px red;">
+        ⏬ Scroll Down for Price list ⏬
+    </marquee>
+</div>-->
+
+
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact">
+  <a class="btn primary" href="https://wa.me/917038821854">
+    <span class="btn-text">CONTACT ON WHATSAPP</span><span class="btn-glow"></span>
+  </a>
+</section>
+
+<!-- FIXED WHATSAPP -->
+<a href="https://wa.me/917038821854" class="whatsapp-float">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Instagram -->
+<script async src="https://www.instagram.com/embed.js"></script>
+
+<script>
+
+/* ===== PRELOADER ===== */
+window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    
+    // थोड्या वेळाने प्री-लोडर लपवा
+    setTimeout(function() {
+        preloader.classList.add('fade-out');
+        
+        // पूर्णपणे काढून टाका
+        setTimeout(function() {
+            preloader.style.display = 'none';
+        }, 500);
+    }, 1000); // 1 सेकंद नंतर लपवा
+});
+
+let index = 0;
+const track = document.getElementById("carouselTrack");
+let slides = [];
+
+fetch("projects.json")
+.then(res => res.json())
+.then(data => {
+  data.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "slide";
+    div.innerHTML = `
+      <blockquote class="instagram-media"
+        data-instgrm-permalink="${p.url}"
+        data-instgrm-version="14"></blockquote>`;
+    track.appendChild(div);
+  });
+  slides = document.querySelectorAll(".slide");
+  if(window.instgrm) window.instgrm.Embeds.process();
+});
+
+/* Manual + Auto Swipe */
+function moveSlide(d){
+  index += d;
+  if(index < 0) index = slides.length - 1;
+  if(index >= slides.length) index = 0;
+  track.style.transform = `translateX(-${index*100}%)`;
+}
+
+
+/* AUTO SWIPE 
+setInterval(()=>{
+  if(slides.length > 1){
+    moveSlide(1);
+  }
+}, 5000);*/
+
+/* AUTO SWIPE */
+let autoSlide = setInterval(()=>{
+  if(slides.length > 1){
+    moveSlide(1);
+  }
+}, 5000000000000000000000);
+
+
+
+/* STOP AUTO SLIDE ON USER INTERACTION */
+const carousel = document.querySelector(".carousel");
+
+["click","touchstart","mousedown"].forEach(evt=>{
+  carousel.addEventListener(evt, ()=>{
+    clearInterval(autoSlide);
+  }, { once:true });
+});
+</script>
+
+</body>
+</html>
+<hr><br>
+
+
+<br id="ratepage">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Pricing & Packages</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root{
+  --bg:#04070d;
+  --card:#0a1220;
+  --neon:#00f7ff;
+  --neon-soft:rgba(0,247,255,.35);
+  --text:#e9faff;
+  --muted:#8fa7c2;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:radial-gradient(circle at top,#08162b,#020409);
+  color:var(--text);
+  padding:20px;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+}
+
+header{
+  text-align:center;
+  margin-bottom:40px;
+}
+
+.logo i{
+  font-size:3rem;
+  color:var(--neon);
+  text-shadow:0 0 20px var(--neon);
+}
+
+h1{
+  margin-top:10px;
+  color:var(--neon);
+  text-shadow:0 0 18px var(--neon);
+}
+
+.subtitle{
+  margin-top:15px;
+  color:var(--muted);
+  max-width:800px;
+  margin-inline:auto;
+}
+
+.section{
+  background:linear-gradient(180deg,#0b1425,#05080d);
+  border-radius:18px;
+  box-shadow:0 0 30px rgba(0,247,255,.12);
+  margin-bottom:45px;
+  overflow:hidden;
+}
+
+.section-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:20px;
+  border-bottom:1px solid var(--neon-soft);
+  background:linear-gradient(90deg,#00f7ff22,#00f7ff05);
+}
+
+.section-header i{
+  color:var(--neon);
+  text-shadow:0 0 10px var(--neon);
+}
+
+.section-header h2{
+  color:var(--neon);
+}
+
+.table-container{
+  overflow-x:auto;
+  padding:20px;
+}
+
+table{
+  width:100%;
+  min-width:900px;
+  border-collapse:collapse;
+}
+
+thead{
+  background:#020814;
+}
+
+th,td{
+  padding:14px;
+  text-align:center;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+th{
+  color:var(--neon);
+  font-weight:600;
+}
+
+td{
+  color:var(--text);
+}
+
+tbody tr:hover{
+  background:rgba(0,247,255,.05);
+}
+
+.highlight{
+  color:var(--neon);
+}
+
+.price-cell{
+  color:#00ff9d;
+  font-weight:700;
+}
+
+.price-row td{
+  background:rgba(0,247,255,.08);
+  font-weight:700;
+}
+
+.badge{
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:.8rem;
+  background:rgba(0,247,255,.18);
+  color:var(--neon);
+  box-shadow:0 0 10px var(--neon-soft);
+}
+
+.note{
+  background:linear-gradient(90deg,#07182e,#04070d);
+  border-left:4px solid var(--neon);
+  padding:18px;
+  border-radius:14px;
+  box-shadow:0 0 25px rgba(0,247,255,.15);
+  color:var(--muted);
+  margin-bottom:40px;
+}
+
+.plan-comparison{
+  display:flex;
+  gap:25px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.plan-card{
+  background:linear-gradient(180deg,#0b1425,#05080d);
+  border-radius:18px;
+  box-shadow:0 0 30px rgba(0,247,255,.15);
+  width:320px;
+  overflow:hidden;
+  transition:.3s;
+}
+
+.plan-card:hover{
+  transform:translateY(-8px);
+}
+
+.plan-header{
+  text-align:center;
+  padding:25px;
+  border-bottom:1px solid var(--neon-soft);
+}
+
+.plan-header h3{
+  color:var(--neon);
+}
+
+.price{
+  font-size:2rem;
+  color:#00ff9d;
+}
+
+.period{
+  color:var(--muted);
+}
+
+.plan-features{
+  padding:20px;
+}
+
+.plan-features li{
+  list-style:none;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.plan-features i{
+  color:var(--neon);
+  margin-right:8px;
+}
+
+.plan-button{
+  display:block;
+  text-align:center;
+  padding:16px;
+  background:var(--neon);
+  color:#000;
+  font-weight:700;
+  text-decoration:none;
+  transition:.3s;
+}
+
+.plan-button:hover{
+  box-shadow:0 0 25px var(--neon);
+}
+
+footer{
+  text-align:center;
+  margin-top:50px;
+  color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+
+
+  <div class="container">    
+    <header>    
+      <div class="logo">    
+        <i class="fas fa-video"></i>    
+      </div>    
+      <h1>Video Pricing & Packages</h1>    
+      <p class="subtitle">Choose the perfect video plan for your needs. From trial videos for beginners to premium brand videos for established businesses, we have options for every budget and requirement.</p>    
+    </header>    <section class="section">    
+  <div class="section-header">    
+    <i class="fas fa-play-circle"></i>    
+    <h2>Video Pricing</h2>    
+  </div>    
+  <div class="table-container">    
+    <table>    
+      <thead>    
+        <tr>    
+          <th>Field</th>    
+          <th class="plan-header"><span class="badge badge-trial">Trial Video</span><br>30 sec</th>    
+          <th class="plan-header"><span class="badge badge-trial">Trial Video</span><br>60 sec</th>    
+          <th class="plan-header"><span class="badge badge-growth">Growth Video</span><br>30 sec</th>    
+          <th class="plan-header"><span class="badge badge-growth">Growth Video</span><br>60 sec</th>    
+          <th class="plan-header"><span class="badge badge-growth">Growth Video</span><br>90 sec</th>    
+          <th class="plan-header"><span class="badge badge-premium">Premium Brand Video</span><br>60 sec</th>    
+          <th class="plan-header"><span class="badge badge-premium">Premium Brand Video</span><br>90 sec</th>    
+        </tr>    
+      </thead>    
+      <tbody>    
+        <tr>    
+          <td class="highlight">Duration</td>    
+          <td>30 seconds</td>    
+          <td>60 seconds</td>    
+          <td>30 seconds</td>    
+          <td>60 seconds</td>    
+          <td>90 seconds</td>    
+          <td>60 seconds</td>    
+          <td>90 seconds</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Price (INR)</td>    
+          <td class="price-cell">₹500</td>    
+          <td class="price-cell">₹800</td>    
+          <td class="price-cell">₹800</td>    
+          <td class="price-cell">₹1200</td>    
+          <td class="price-cell">₹1600</td>    
+          <td class="price-cell">₹2000</td>    
+          <td class="price-cell">₹3000</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Model</td>    
+          <td>Me (Default)</td>    
+          <td>Me (Default)</td>    
+          <td>Me / Customer</td>    
+          <td>Me / Customer</td>    
+          <td>Me / Customer</td>    
+          <td>Customer / AI Avatar</td>    
+          <td>Customer / AI Avatar</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Customization</td>    
+          <td>1 time</td>    
+          <td>1 time</td>    
+          <td>Up to 3 revisions</td>    
+          <td>Up to 3 revisions</td>    
+          <td>Up to 3 revisions</td>    
+          <td>Unlimited (within scope)</td>    
+          <td>Unlimited (within scope)</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Watermark</td>    
+          <td>Large (Always)</td>    
+          <td>Large (Always)</td>    
+          <td>Small / Optional</td>    
+          <td>Small / Optional</td>    
+          <td>Small / Optional</td>    
+          <td>No</td>    
+          <td>No</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Best For</td>    
+          <td>First-time users</td>    
+          <td>Testing ads</td>    
+          <td>Small business</td>    
+          <td>Regular ads</td>    
+          <td>Campaigns</td>    
+          <td>Branding</td>    
+          <td>High-end ads</td>    
+        </tr>    
+        <tr class="price-row">    
+          <td>Price</td>    
+          <td>₹500</td>    
+          <td>₹800</td>    
+          <td>₹800</td>    
+          <td>₹1200</td>    
+          <td>₹1600</td>    
+          <td>₹2000</td>    
+          <td>₹3000</td>    
+        </tr>    
+      </tbody>    
+    </table>    
+  </div>    
+</section>    
+    
+<section class="section">    
+  <div class="section-header">    
+    <i class="fas fa-box-open"></i>    
+    <h2>Package Comparison</h2>    
+  </div>    
+  <div class="table-container">    
+    <table>    
+      <thead>    
+        <tr>    
+          <th>Feature / Plan</th>    
+          <th class="plan-header"><span class="badge badge-trial">Trial Pack</span></th>    
+          <th class="plan-header"><span class="badge badge-growth">Growth Pack</span></th>    
+          <th class="plan-header"><span class="badge badge-premium">Premium Brand Pack</span></th>    
+        </tr>    
+      </thead>    
+      <tbody>    
+        <tr>    
+          <td class="highlight">Video Duration</td>    
+          <td>30 sec, 60 sec</td>    
+          <td>30 / 60 / 90 sec</td>    
+          <td>60 / 90 sec + Reel/Story</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Customization</td>    
+          <td>1 time</td>    
+          <td>3 revisions</td>    
+          <td>Unlimited (within scope)</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Script Custom</td>    
+          <td>No</td>    
+          <td>Yes</td>    
+          <td>Yes</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Color / Text Style</td>    
+          <td>Limited</td>    
+          <td>Custom</td>    
+          <td>Brand-level</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Model Used</td>    
+          <td>Me (Default)</td>    
+          <td>Me / Customer</td>    
+          <td>Customer / AI Avatar</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Customer Model</td>    
+          <td>Not Available</td>    
+          <td>Available</td>    
+          <td>Available</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Watermark</td>    
+          <td>Always (Large)</td>    
+          <td>Always (Small)</td>    
+          <td>No</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Total Videos</td>    
+          <td>12</td>    
+          <td>12</td>    
+          <td>12</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Free Videos</td>    
+          <td>10 + 2 Free</td>    
+          <td>No Free</td>    
+          <td>9 + 3 Free</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Video Quality</td>    
+          <td>Standard</td>    
+          <td>High</td>    
+          <td>Cinematic / Luxury</td>    
+        </tr>    
+        <tr>    
+          <td class="highlight">Best For</td>    
+          <td>Trial / Testing</td>    
+          <td>Small Businesses</td>    
+          <td>Premium Branding</td>    
+        </tr>    
+        <tr class="price-row">    
+          <td>Package Price</td>    
+          <td>₹4,800 <span style="font-size:0.9rem; color:#7f8c8d;">(₹400 per video)</span></td>    
+          <td>₹12,000 <span style="font-size:0.9rem; color:#7f8c8d;">(₹1,000 per video)</span></td>    
+          <td>₹27,000 <span style="font-size:0.9rem; color:#7f8c8d;">(₹2,250 per video)</span></td>    
+        </tr>    
+      </tbody>    
+    </table>    
+  </div>    
+</section>    
+    
+<div class="note">    
+  <i class="fas fa-exclamation-circle"></i>    
+  <strong>Note:</strong> Package pricing offers better value compared to per-video rates. All packages include 12 videos. Contact us for custom packages or bulk discounts.    
+</div>    
+    
+<div class="plan-comparison">    
+  <div class="plan-card trial">    
+    <div class="plan-header">    
+      <h3>Trial Pack</h3>    
+      <div class="price">₹4,800</div>    
+      <div class="period">12 videos (₹400 per video)</div>    
+    </div>    
+    <div class="plan-features">    
+      <ul>    
+        <li><i class="fas fa-check-circle"></i> 10 + 2 Free Videos</li>    
+        <li><i class="fas fa-clock"></i> 30 sec & 60 sec durations</li>    
+        <li><i class="fas fa-user"></i> Default Model Only</li>    
+        <li><i class="fas fa-paint-brush"></i> Limited Customization</li>    
+        <li><i class="fas fa-water"></i> Large Watermark</li>    
+        <li><i class="fas fa-bullseye"></i> Best for Trial/Testing</li>    
+      </ul>    
+    </div>    
+    <a href="#" class="plan-button">Choose Trial Pack</a>    
+  </div>    
+      
+  <div class="plan-card growth">    
+    <div class="plan-header">    
+      <h3>Growth Pack</h3>    
+      <div class="price">₹12,000</div>    
+      <div class="period">12 videos (₹1,000 per video)</div>    
+    </div>    
+    <div class="plan-features">    
+      <ul>    
+        <li><i class="fas fa-check-circle"></i> 12 Videos (No Free)</li>    
+        <li><i class="fas fa-clock"></i> 30, 60 & 90 sec durations</li>    
+        <li><i class="fas fa-user"></i> Me or Customer Model</li>    
+        <li><i class="fas fa-paint-brush"></i> 3 Revisions per video</li>    
+        <li><i class="fas fa-water"></i> Small/Optional Watermark</li>    
+        <li><i class="fas fa-bullseye"></i> Best for Small Businesses</li>    
+      </ul>    
+    </div>    
+    <a href="#" class="plan-button">Choose Growth Pack</a>    
+  </div>    
+      
+  <div class="plan-card premium">    
+    <div class="plan-header">    
+      <h3>Premium Brand Pack</h3>    
+      <div class="price">₹27,000</div>    
+      <div class="period">12 videos (₹2,250 per video)</div>    
+    </div>    
+    <div class="plan-features">    
+      <ul>    
+        <li><i class="fas fa-check-circle"></i> 9 + 3 Free Videos</li>    
+        <li><i class="fas fa-clock"></i> 60, 90 sec + Reel/Story</li>    
+        <li><i class="fas fa-user"></i> Customer or AI Avatar</li>    
+        <li><i class="fas fa-paint-brush"></i> Unlimited Customization</li>    
+        <li><i class="fas fa-water"></i> No Watermark</li>    
+        <li><i class="fas fa-bullseye"></i> Best for Premium Brands</li>    
+      </ul>    
+    </div>    
+    <a href="#" class="plan-button">Choose Premium Pack</a>    
+  </div>    
+</div>    
+    
+<footer>    
+  <p>© 2026 <br> 
+  <b> Neon Ai Studio</b> <br>
+  <u>Video Production Services.</u><br><br>
+  <i>All prices in Indian Rupees (INR)</i></p>
+  <br>
+  <p><i class="fas fa-phone-alt"></i> +91 70388 21854 <br> <i class="fas fa-envelope"></i> moreshwar1234bhonde@gmail.com</p>
+  </footer>
+</div>
+
+</body>
+</html>
